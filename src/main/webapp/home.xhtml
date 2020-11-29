@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>AC PTIT</title>
+	<h:outputStylesheet name="css/style.css"></h:outputStylesheet>
+</h:head>
+<h:body>
+	<h:form id="mainForm">
+		<p:fileUpload fileUploadListener="#{fileUploadBean.upload}"
+			update="@form" fileLimit="1" />
+		<h:panelGrid id="analyzePanelGrid">
+			<p:commandButton value="Analyze"
+				actionListener="#{fileUploadBean.analyze}"
+				rendered="#{fileUploadBean.fileToBeAnalyzed ne null}"
+				onclick="PF('pbAjax').start();PF('analyzeBtn').disable();"
+				widgetVar="analyzeBtn" />
+			<p:progressBar widgetVar="pbAjax" ajax="true"
+				value="#{fileUploadBean.progress}" labelTemplate="{value}%"
+				styleClass="animated" global="false">
+				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}"
+					update="@form" oncomplete="PF('analyzeBtn').enable()" />
+			</p:progressBar>
+		</h:panelGrid>
+		<p:growl id="message" />
+		<p:dataTable id="resultTable" var="result"
+			value="#{fileUploadBean.results}" rows="20" selectionMode="single"
+			selection="#{fileUploadBean.selectedAnalysis}" paginator="true"
+			rowKey="#{result.dist}" emptyMessage="No submissions found"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+			rowsPerPageTemplate="10,20,30" widgetVar="resultWV"
+			filteredValue="#{fileUploadBean.filteredSubResults}"
+			rendered="#{not empty fileUploadBean.results}">
+			<p:column headerText="Submission A">
+				<h:outputText value="#{result.a}" />
+			</p:column>
+
+			<p:column headerText="Submission B">
+				<h:outputText value="#{result.b}" />
+			</p:column>
+
+			<p:column headerText="Distance" sortBy="#{result.dist}"
+				filterBy="#{result.dist}" filterMatchMode="lte">
+				<f:facet name="filter">
+					<p:spinner onchange="PF('resultWV').filter()" min="0" max="1"
+						stepFactor="0.01">
+						<f:converter converterId="javax.faces.Float" />
+					</p:spinner>
+				</f:facet>
+				<h:outputText value="#{result.dist}" />
+			</p:column>
+
+			<f:facet name="footer">
+				<p:commandButton process="resultTable" value="View"
+					update=":mainForm:analysisDetailsTable"
+					oncomplete="PF('analysisDetailsWV').show()" />
+			</f:facet>
+		</p:dataTable>
+
+
+		<p:dialog widgetVar="analysisDetailsWV" modal="true" showEffect="fade"
+			hideEffect="fade">
+			<p:scrollPanel id="analysisDetailsTable">
+				<p:panelGrid columns="2" style="width: 500px;">
+					<h:outputText value="#{fileUploadBean.selectedAnalysis.a}" />
+					<h:outputText value="#{fileUploadBean.selectedAnalysis.b}" />
+
+					<h:outputText
+						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a, fileUploadBean.selectedAnalysis.b, true)}"
+						styleClass="preformatted" />
+					<span style="white-space: pre;">#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a,
+						fileUploadBean.selectedAnalysis.b, false)}</span>
+				</p:panelGrid>
+			</p:scrollPanel>
+		</p:dialog>
+	</h:form>
+</h:body>
+</html>
