@@ -6,6 +6,7 @@ package core;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -308,7 +309,7 @@ public class Analysis implements XMLSerializable {
 	/**
 	 * Inner class, representing a Result. Good for sorting
 	 */
-	public static class Result implements Comparable<Object> {
+	public static class Result implements Comparable<Object>, Serializable {
 		private Submission a, b;
 		private float d;
 

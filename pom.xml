@@ -110,10 +110,11 @@
 			<version>1.1.2</version>
 		</dependency>
 		<!-- PrimeFaces -->
+		<!-- https://mvnrepository.com/artifact/org.primefaces/primefaces -->
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>6.1</version>
+			<version>8.0</version>
 		</dependency>
 	</dependencies>
 	<build>

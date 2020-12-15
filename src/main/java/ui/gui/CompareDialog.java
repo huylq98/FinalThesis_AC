@@ -1,10 +1,13 @@
 package ui.gui;
 
 import core.Submission;
-
+import es.ucm.fdi.ac.ptrie.Location;
 import es.ucm.fdi.ac.ptrie.Node;
 import es.ucm.fdi.ac.ptrie.PTrie;
 import es.ucm.fdi.ac.stringmap.Mapper;
+import ui.gui.CommonHighlighter.Interval;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -90,9 +93,40 @@ public class CompareDialog {
 		ab.setRightClickPopup(hb);
 		ab.setCaretVisible(false);
 		
+		
+
+		// color increment
+		float ci = 1f / nodes.size();
+		ArrayList<Interval> intervalB = new ArrayList<>(nodes.size());
+
+		for (int i = 0; i < nodes.size(); i++) {
+			Node n = nodes.get(i);
+			int j = (i % 2 == 0) ? i / 2 : nodes.size() / 2 + i;
+			Color color = Color.getHSBColor(j * ci, 0.10f, 1f);
+			for (Location loc : n.getLocations()) {
+				if (loc.getBase() == subjectB) {
+					Interval in = new Interval(mb.rmap(loc.getOffset(), true), mb
+							.rmap(loc.getOffset() + n.getStringLength(), false),
+							color, n, loc);
+					intervalB.add(in);
+				}
+			}
+		}
+		
+		int numOfCharInserted = 0;
+		
 		try {
 			this.sourceA = aa.getDocument().getText(0, aa.getDocumentLength());
 			this.sourceB = ab.getDocument().getText(0, ab.getDocumentLength());
+			
+//			StringBuilder sb = new StringBuilder(this.sourceB);
+//			for(Interval in : intervalB) {
+//				sb.insert(in.so + numOfCharInserted, "<span style=\"white-space: pre; color:red;\">");
+//				numOfCharInserted += 43;
+//				sb.insert(in.eo + numOfCharInserted, "</span>");
+//				numOfCharInserted += 7;
+//			}
+//			this.sourceB = sb.toString();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

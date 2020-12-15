@@ -231,7 +231,7 @@ public class CommonHighlighter extends JPopupMenu implements Highlight {
 		super.show(invoker, x, y);
 	}
 
-	private static class Interval {
+	static class Interval {
 		public int so, eo; // start, end
 		public Color color;
 		public Node node;

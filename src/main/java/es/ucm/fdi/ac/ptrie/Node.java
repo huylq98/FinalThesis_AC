@@ -1,54 +1,3 @@
-/**
- * AC - A source-code copy detector
- *
- *     For more information please visit:  http://github.com/manuel-freire/ac
- *
- * ****************************************************************************
- *
- * This file is part of AC, version 2.x
- *
- * AC is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
- *
- * AC is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with AC.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * AC - A source-code copy detector
- *
- *     For more information please visit:  http://github.com/manuel-freire/ac
- *
- * ****************************************************************************
- *
- * This file is part of AC, version 2.0
- *
- * AC is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License,
- * or (at your option) any later version.
- *
- * AC is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with AC.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/*
- * Node.java
- *
- * Created on September 1, 2006, 10:20 PM
- */
-
 package es.ucm.fdi.ac.ptrie;
 
 import java.util.ArrayList;
@@ -135,7 +84,6 @@ public class Node {
 			return (start <= n.start && n.start <= end)
 					|| (start <= n.end && n.end <= end);
 		}
-		System.err.println("can't know...");
 		return false;
 	}
 
@@ -209,7 +157,6 @@ public class Node {
 		}
 
 		uniqueCount = unique.size();
-		//unique.clear();
 	}
 
 	public void findRare(ArrayList<Node> found, int minFreq, int maxFreq) {
@@ -283,11 +230,11 @@ public class Node {
 	/**
 	 * Add another location to this
 	 */
-	public void addLocation(Object o, int pos) {
-		ArrayList<Integer> l = locations.get(o);
+	public void addLocation(Object obj, int pos) {
+		ArrayList<Integer> l = locations.get(obj);
 		if (l == null) {
 			l = new ArrayList<Integer>();
-			locations.put(o, l);
+			locations.put(obj, l);
 		}
 		// FIXME: Avoid memory hogs
 		l.add(pos);

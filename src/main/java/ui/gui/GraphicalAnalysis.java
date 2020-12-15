@@ -7,6 +7,8 @@ package ui.gui;
 import core.Analysis;
 import ui.Main;
 import core.test.Test;
+import jsf.bean.FileUploadBean;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.PrintWriter;
@@ -16,8 +18,6 @@ import java.time.Instant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
-
-import bean.FileUploadBean;
 
 public class GraphicalAnalysis implements ActionListener {
 
@@ -62,12 +62,9 @@ public class GraphicalAnalysis implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent evt) {
-		double p = test.getProgress();
-		long elapsed = System.currentTimeMillis() - startTime;
-		FileUploadBean.setProgress((int) (p * 100));
 		if (isTestFinished) {
 			t.stop();
-			log.info("Total time elapsed: " + elapsed + " ms");
+			FileUploadBean.progress++;
 			log.info("Total time: " + Duration.between(Main.start, Instant.now()).toMillis() + "ms");
 			callback.run();
 		}

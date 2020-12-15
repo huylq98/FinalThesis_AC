@@ -11,14 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
-import bean.FileUploadBean;
 import core.Analysis;
+import core.Analysis.Result;
+import jsf.bean.FileUploadBean;
 
 public class TestResultsDialog {
 	private Analysis ac;
 	private String testKey;
-	public static Analysis.Result[] results;
 
 	public TestResultsDialog(Analysis ac, String testKey) {
 		this.ac = ac;
@@ -27,11 +28,10 @@ public class TestResultsDialog {
 	}
 
 	public void showResults() {
-		Analysis.Result[] R = ac.sortTestResults(testKey);
-		results = R;
+		Result[] R = ac.sortTestResults(testKey);
+		FileUploadBean.subResults.addAll(Arrays.asList(R));
 		Charset charset = Charset.forName("US-ASCII");
 		for (int i = 0; i < R.length; i++) {
-			FileUploadBean.subResults.add(R[i]);
 			String s = R[i].getA() + " - " + R[i].getB() + ": " + R[i].getDist();
 			Path resultFile = Paths.get("C:\\Users\\Admin\\Downloads\\Result" + "\\"
 					+ R[i].getA().toString().substring(0, R[i].getA().toString().indexOf("_")) + ".txt");
