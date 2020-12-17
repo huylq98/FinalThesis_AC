@@ -67,6 +67,11 @@ public class Main {
 			ZipSelectionPanel.analyze();
 			main.launchTest(new NCDTest(new ZipFormat()), true);
 		});
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void selectionConfirmed(SourceSet ss) {

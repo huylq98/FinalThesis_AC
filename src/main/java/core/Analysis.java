@@ -310,24 +310,24 @@ public class Analysis implements XMLSerializable {
 	 * Inner class, representing a Result. Good for sorting
 	 */
 	public static class Result implements Comparable<Object>, Serializable {
-		private Submission a, b;
-		private float d;
+		public Submission a, b;
+		public float dist;
 
 		public Result(Submission a, Submission b, float d) {
 			this.a = a;
 			this.b = b;
-			this.d = d;
+			this.dist = d;
 		}
 
 		@Override
 		public int compareTo(Object o) {
-			float f = d - ((Result) o).d;
+			float f = dist - ((Result) o).dist;
 			return f > 0 ? 1 : (f < 0 ? -1 : 0);
 		}
 
 		@Override
 		public String toString() {
-			return "" + d + " " + a.getId() + " " + b.getId();
+			return "" + dist + " " + a.getId() + " " + b.getId();
 		}
 
 		public Submission getA() {
@@ -339,7 +339,7 @@ public class Analysis implements XMLSerializable {
 		}
 
 		public float getDist() {
-			return d;
+			return dist;
 		}
 	}
 

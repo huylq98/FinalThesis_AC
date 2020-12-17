@@ -39,8 +39,10 @@ public class FileUploadBean implements Serializable {
 	public static List<Result> subResults = new ArrayList<>();
 	private Result selectedAnalysis;
 	private LazyDataModel<Result> filteredSubResults;
-	private Float defaultDist = 0.05f;
+	private Float defaultDist = 0.5f;
 	private LazyDataModel<Result> lazyModel;
+	private List<Integer[]> currentLocationsOfA;
+	private List<Integer[]> currentLocationsOfB;
 
 	private UploadedFile file;
 
@@ -127,14 +129,14 @@ public class FileUploadBean implements Serializable {
 	}
 
 	public void onComplete() {
+		if (subResults != null) {
+			lazyModel = new LazyResultDataModel(subResults);
+		}
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Analyze Completed!"));
 	}
 
 	public LazyDataModel<Result> getResults() {
 //		return TestResultsDialog.results != null ? Arrays.asList(TestResultsDialog.results) : null;
-		if (subResults != null) {
-			lazyModel = new LazyResultDataModel(subResults);
-		}
 		return lazyModel;
 
 	}
@@ -143,10 +145,51 @@ public class FileUploadBean implements Serializable {
 		if (subA == null || subB == null)
 			return null;
 		CompareDialog cd = new CompareDialog(subA, subB);
-		cd.wrapAndHighlight(20);
+		cd.wrapAndHighlight(10);
+		this.currentLocationsOfA = new ArrayList<>();
+		this.currentLocationsOfB = new ArrayList<>();
+
+		cd.getIntervalA().forEach(interval -> this.currentLocationsOfA.add(new Integer[] { interval.so, interval.eo }));
+		cd.getIntervalB().forEach(interval -> this.currentLocationsOfB.add(new Integer[] { interval.so, interval.eo }));
+
+		String submissionA = cd.getSourceA();
+		String submissionB = cd.getSourceB();
+
+		List<String> partOfSourceA = new ArrayList<>();
+		List<String> partOfSourceB = new ArrayList<>();
+		for (Integer[] location : this.currentLocationsOfA) {
+			partOfSourceA.add(submissionA.substring(location[0], location[1]));
+		}
+		for (Integer[] location : this.currentLocationsOfB) {
+			partOfSourceB.add(submissionB.substring(location[0], location[1]));
+		}
+
+		for (String part : partOfSourceA) {
+			submissionA = submissionA.replace(part, "<span style=\"background-color: yellow;\">" + part + "</span>");
+		}
+
+		for (String part : partOfSourceB) {
+			submissionB = submissionB.replace(part, "<span style=\"background-color: yellow;\">" + part + "</span>");
+		}
 		if (sel)
-			return cd.getSourceA();
+			return submissionA;
 		else
-			return cd.getSourceB();
+			return submissionB;
+	}
+
+	public List<Integer[]> getCurrentLocationsOfA() {
+		return currentLocationsOfA;
+	}
+
+	public void setCurrentLocationsOfA(List<Integer[]> currentLocationsOfA) {
+		this.currentLocationsOfA = currentLocationsOfA;
+	}
+
+	public List<Integer[]> getCurrentLocationsOfB() {
+		return currentLocationsOfB;
+	}
+
+	public void setCurrentLocationsOfB(List<Integer[]> currentLocationsOfB) {
+		this.currentLocationsOfB = currentLocationsOfB;
 	}
 }

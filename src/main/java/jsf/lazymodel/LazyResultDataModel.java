@@ -44,13 +44,30 @@ public class LazyResultDataModel extends LazyDataModel<Result> {
 	            boolean match = true;
 	 
 	            if (filterMeta != null) {
+	            	if(filterMeta.isEmpty()) {
+						try {
+							  String filterField = "dist";
+		                        Object filterValue = 0.5;
+		                        String fieldValue = String.valueOf(result.getClass().getField(filterField).get(result));
+		                        if (filterValue == null || Float.parseFloat(fieldValue) <= Float.parseFloat(filterValue.toString())) {
+		                            match = true;
+		                        }
+		                        else {
+		                            match = false;
+		                        }
+						} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
+								| SecurityException e) {
+							match = false;
+						}
+	            	}
+	            	
 	                for (FilterMeta meta : filterMeta.values()) {
 	                    try {
 	                        String filterField = meta.getFilterField();
 	                        Object filterValue = meta.getFilterValue();
 	                        String fieldValue = String.valueOf(result.getClass().getField(filterField).get(result));
 	 
-	                        if (filterValue == null || fieldValue.startsWith(filterValue.toString())) {
+	                        if (filterValue == null || Float.parseFloat(fieldValue) <= Float.parseFloat(filterValue.toString())) {
 	                            match = true;
 	                        }
 	                        else {

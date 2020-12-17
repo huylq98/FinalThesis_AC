@@ -24,6 +24,8 @@ public class CompareDialog {
 	private Submission subjectB = null;
 	private String sourceA;
 	private String sourceB;
+	private ArrayList<Interval> intervalA;
+	private ArrayList<Interval> intervalB;
 
 	public CompareDialog(Submission a, Submission b) {
 		jTabbedPaneA = new JTabbedPane();
@@ -94,10 +96,25 @@ public class CompareDialog {
 		ab.setCaretVisible(false);
 		
 		
-
-		// color increment
 		float ci = 1f / nodes.size();
-		ArrayList<Interval> intervalB = new ArrayList<>(nodes.size());
+		this.intervalA = new ArrayList<>(nodes.size());
+
+		for (int i = 0; i < nodes.size(); i++) {
+			Node n = nodes.get(i);
+			int j = (i % 2 == 0) ? i / 2 : nodes.size() / 2 + i;
+			Color color = Color.getHSBColor(j * ci, 0.10f, 1f);
+			for (Location loc : n.getLocations()) {
+				if (loc.getBase() == subjectA) {
+					Interval in = new Interval(ma.rmap(loc.getOffset(), true), ma
+							.rmap(loc.getOffset() + n.getStringLength(), false),
+							color, n, loc);
+					this.intervalA.add(in);
+				}
+			}
+		}
+		
+		// color increment
+		this.intervalB = new ArrayList<>(nodes.size());
 
 		for (int i = 0; i < nodes.size(); i++) {
 			Node n = nodes.get(i);
@@ -108,12 +125,10 @@ public class CompareDialog {
 					Interval in = new Interval(mb.rmap(loc.getOffset(), true), mb
 							.rmap(loc.getOffset() + n.getStringLength(), false),
 							color, n, loc);
-					intervalB.add(in);
+					this.intervalB.add(in);
 				}
 			}
 		}
-		
-		int numOfCharInserted = 0;
 		
 		try {
 			this.sourceA = aa.getDocument().getText(0, aa.getDocumentLength());
@@ -178,7 +193,7 @@ public class CompareDialog {
 	}
 
 	private String wrapText(String text, int maxCols) {
-		maxCols = 80;
+		maxCols = 120;
 		StringBuilder sb = new StringBuilder();
 		int n = 0;
 		for (int i = 0; i < text.length(); i++) {
@@ -228,5 +243,21 @@ public class CompareDialog {
 
 	public void setSourceB(String sourceB) {
 		this.sourceB = sourceB;
+	}
+
+	public ArrayList<Interval> getIntervalA() {
+		return intervalA;
+	}
+
+	public void setIntervalA(ArrayList<Interval> intervalA) {
+		this.intervalA = intervalA;
+	}
+
+	public ArrayList<Interval> getIntervalB() {
+		return intervalB;
+	}
+
+	public void setIntervalB(ArrayList<Interval> intervalB) {
+		this.intervalB = intervalB;
 	}
 }

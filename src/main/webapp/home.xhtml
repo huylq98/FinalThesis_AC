@@ -11,7 +11,7 @@
 </h:head>
 <h:body>
 	<h:form id="mainForm" enctype="multipart/form-data">
-		<p:fileUpload  value="#{fileUploadBean.file}"
+		<p:fileUpload value="#{fileUploadBean.file}"
 			listener="#{fileUploadBean.upload}" auto="true" update="@form" />
 		<h:panelGrid>
 			<p:commandButton value="Analyze"
@@ -34,7 +34,7 @@
 			rows="20" rowsPerPageTemplate="15,20,25" selectionMode="single"
 			scrollable="true" scrollHeight="500" widgetVar="dataTableWidgetVar"
 			filteredValue="#{fileUploadBean.filteredSubResults}"
-			rendered="#{not empty fileUploadBean.results}">
+			rendered="#{fileUploadBean.results ne null}">
 			<p:ajax event="rowSelect" update=":mainForm:resultDetail"
 				oncomplete="PF('resultDialog').show()" />
 			<p:column headerText="Submission A">
@@ -46,10 +46,9 @@
 			</p:column>
 
 			<p:column headerText="Distance" sortBy="#{result.dist}"
-				filterBy="#{result.dist}" filterMatchMode="lte"
-				filterValue="#{fileUploadBean.defaultDist}">
+				filterBy="#{result.dist}" filterMatchMode="lte">
 				<f:facet name="filter">
-					<p:spinner onchange="PF('dataTableWidgetVar').filter()" min="0"
+					<p:spinner value="#{fileUploadBean.defaultDist}" onchange="PF('dataTableWidgetVar').filter()" min="0"
 						max="1" stepFactor="0.01">
 						<f:converter converterId="javax.faces.Float" />
 					</p:spinner>
@@ -68,14 +67,15 @@
 				<p:scrollPanel style="width:500px;height:500px">
 					<h:outputText
 						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a, fileUploadBean.selectedAnalysis.b, true)}"
-						styleClass="preformatted" />
+						styleClass="preformatted" escape="false" />
 				</p:scrollPanel>
 				<p:scrollPanel style="width:500px;height:500px">
 					<h:outputText
 						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a,
 						fileUploadBean.selectedAnalysis.b, false)}"
-						styleClass="preformatted" />
+						styleClass="preformatted" escape="false"/>
 				</p:scrollPanel>
+				
 			</p:panelGrid>
 		</p:dialog>
 	</h:form>
