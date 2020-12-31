@@ -13,7 +13,9 @@ import core.Analysis.Result;
 
 public class LazyResultDataModel extends LazyDataModel<Result> {
 
-	 private List<Result> datasource;
+	private static final long serialVersionUID = 1L;
+	
+	private List<Result> datasource;
 	 
 	    public LazyResultDataModel(List<Result> datasource) {
 	        this.datasource = datasource;

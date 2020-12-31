@@ -49,9 +49,8 @@
  */
 package ui.gui;
 
-import es.ucm.fdi.ac.ptrie.Location;
-import es.ucm.fdi.ac.ptrie.Node;
-import es.ucm.fdi.ac.stringmap.Mapper;
+import stringmap.Mapper;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FontMetrics;
@@ -60,14 +59,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import org.syntax.jedit.JEditTextArea;
 import org.syntax.jedit.TextAreaPainter.Highlight;
+
+import ptrie.Location;
+import ptrie.Node;
 
 /**
  *
@@ -76,7 +76,6 @@ import org.syntax.jedit.TextAreaPainter.Highlight;
 public class CommonHighlighter extends JPopupMenu implements Highlight {
 
 	private JEditTextArea ta;
-	private Highlight next;
 	// list of (colored) intervals
 	private ArrayList<Interval> intervals;
 	private CommonHighlighter peer;
@@ -114,38 +113,6 @@ public class CommonHighlighter extends JPopupMenu implements Highlight {
 				}
 			}
 		}
-	}
-
-	private static void sortNodes(ArrayList<Node> sel, final Object base) {
-		Collections.sort(sel, new Comparator<Node>() {
-
-			public int compare(Node o1, Node o2) {
-				int low1 = Integer.MAX_VALUE;
-				int low2 = Integer.MAX_VALUE;
-				for (Location l : o1.getLocations()) {
-					if (l.getBase() == base) {
-						low1 = Math.min(low1, l.getOffset());
-					}
-				}
-				for (Location l : o2.getLocations()) {
-					if (l.getBase() == base) {
-						low2 = Math.min(low2, l.getOffset());
-					}
-				}
-				return low1 - low2;
-			}
-		});
-	}
-
-	/**
-	 * Debugging - show (abridged) interval of a long string
-	 */
-	private static void showSnip(String prefix, String s) {
-		String fixed = s.replaceAll("\\p{javaWhitespace}", "_");
-		System.err.println(prefix
-				+ fixed.substring(0, Math.min(fixed.length(), 20)) + " ... "
-				+ fixed.substring(Math.max(0, fixed.length() - 20)) + " ("
-				+ s.length() + ")");
 	}
 
 	/**
@@ -248,7 +215,6 @@ public class CommonHighlighter extends JPopupMenu implements Highlight {
 
 	public void init(JEditTextArea textArea, Highlight next) {
 		this.ta = textArea;
-		this.next = next;
 	}
 
 	public void paintHighlight(Graphics gfx, int line, int y) {

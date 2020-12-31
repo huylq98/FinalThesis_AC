@@ -33,7 +33,7 @@ public class TestResultsDialog {
 		Charset charset = Charset.forName("US-ASCII");
 		for (int i = 0; i < R.length; i++) {
 			String s = R[i].getA() + " - " + R[i].getB() + ": " + R[i].getDist();
-			Path resultFile = Paths.get("C:\\Users\\Admin\\Downloads\\Result" + "\\"
+			Path resultFile = Paths.get("C:\\Users\\synergix206\\Downloads\\Result" + "\\"
 					+ R[i].getA().toString().substring(0, R[i].getA().toString().indexOf("_")) + ".txt");
 			if (Files.notExists(resultFile)) {
 				try {

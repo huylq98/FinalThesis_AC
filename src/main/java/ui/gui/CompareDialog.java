@@ -1,10 +1,10 @@
 package ui.gui;
 
 import core.Submission;
-import es.ucm.fdi.ac.ptrie.Location;
-import es.ucm.fdi.ac.ptrie.Node;
-import es.ucm.fdi.ac.ptrie.PTrie;
-import es.ucm.fdi.ac.stringmap.Mapper;
+import ptrie.Location;
+import ptrie.Node;
+import ptrie.PTrie;
+import stringmap.Mapper;
 import ui.gui.CommonHighlighter.Interval;
 
 import java.awt.Color;
@@ -133,15 +133,6 @@ public class CompareDialog {
 		try {
 			this.sourceA = aa.getDocument().getText(0, aa.getDocumentLength());
 			this.sourceB = ab.getDocument().getText(0, ab.getDocumentLength());
-			
-//			StringBuilder sb = new StringBuilder(this.sourceB);
-//			for(Interval in : intervalB) {
-//				sb.insert(in.so + numOfCharInserted, "<span style=\"white-space: pre; color:red;\">");
-//				numOfCharInserted += 43;
-//				sb.insert(in.eo + numOfCharInserted, "</span>");
-//				numOfCharInserted += 7;
-//			}
-//			this.sourceB = sb.toString();
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

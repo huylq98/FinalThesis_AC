@@ -1,4 +1,4 @@
-package es.ucm.fdi.ac.stringmap;
+package stringmap;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -127,28 +127,6 @@ public class Mapper {
 		for (int i = 0; i < p; i++)
 			System.err.print(" ");
 		System.err.println("^___" + p);
-	}
-
-	public static void main(String args[]) {
-		String s = "The explicit state of a matcher includes the start and end indices "
-				+ "of the most recent successful match. It also includes the start "
-				+ "and end indices of the input subsequence captured by each "
-				+ "capturing group in the pattern as well as a total count of such "
-				+ "subsequences. As a convenience, methods are also provided for "
-				+ "returning these captured subsequences in string form. ";
-		Mapper m = new Mapper(s, " of | it | as | the ", " ");
-		for (Mapping mp : m.getMappings()) {
-			System.err.println(
-					mp + " '" + s.substring(mp.a1, mp.a2) + "' to '" + m.getDest().substring(mp.b1, mp.b2) + "'");
-		}
-		System.err.println(s);
-		System.err.println(m.getDest());
-//		for (int i = 0; i < 10; i++) {
-//			int r = (int) (Math.random() * m.getDest().length());
-//			printPositionInString(m.getDest(), r);
-//			printPositionInString(s, m.rmap(r, true));
-//			printPositionInString(s, m.rmap(r, false));
-//		}
 	}
 
 	/**

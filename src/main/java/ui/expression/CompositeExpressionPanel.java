@@ -32,13 +32,6 @@ public class CompositeExpressionPanel extends ExpressionPanel {
 		p.setExpression(c);
 	}
 
-	public void deleteSubexp(ExpressionPanel subexp) {
-		e.removeChild(subexp.getExpression());
-		CompositeExpressionPanel p = parentPanel;
-		while (p != null) {
-			p = p.parentPanel;
-		}
-	}
 
 	public void confirm() {
 		test(false);

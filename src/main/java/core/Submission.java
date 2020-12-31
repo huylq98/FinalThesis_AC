@@ -76,7 +76,7 @@ public class Submission implements XMLSerializable {
 
 	public String getHash() {
 		if (!hashUpToDate) {
-			StringBuilder sb = new StringBuilder();
+			StringBuilder sb = new StringBuilder(this.id);
 			for (Source s : getSources()) {
 				sb.append(s.getCode());
 			}

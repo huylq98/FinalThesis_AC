@@ -27,7 +27,6 @@ public class GraphicalAnalysis implements ActionListener {
 	private Test test;
 	private Analysis ac;
 	private Runnable callback;
-	private long startTime;
 	private boolean isTestFinished = false;
 
 	public GraphicalAnalysis(Analysis ac, Test test, Runnable callback) {
@@ -40,7 +39,7 @@ public class GraphicalAnalysis implements ActionListener {
 		TestRunner runner = new TestRunner();
 		Thread testThread = new Thread(runner);
 		testThread.start();
-		startTime = System.currentTimeMillis();
+		System.currentTimeMillis();
 		t = new javax.swing.Timer(1000, this); // miliseconds
 		t.setRepeats(true);
 		t.start();

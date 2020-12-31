@@ -4,36 +4,48 @@
 */
 package jsf.bean;
 
+import static java.nio.file.FileVisitResult.CONTINUE;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.TreeNode;
 import org.primefaces.model.file.UploadedFile;
 
 import core.Analysis.Result;
+import core.util.FileUtils;
 import core.Submission;
 import jsf.lazymodel.LazyResultDataModel;
 import ui.Main;
 import ui.gui.CompareDialog;
 
 @Named
-@SessionScoped
+@ViewScoped
 public class FileUploadBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger log = LogManager.getLogger(FileUploadBean.class);
 	private String fileToBeAnalyzed;
 	public static List<Result> subResults = new ArrayList<>();
@@ -41,8 +53,7 @@ public class FileUploadBean implements Serializable {
 	private LazyDataModel<Result> filteredSubResults;
 	private Float defaultDist = 0.5f;
 	private LazyDataModel<Result> lazyModel;
-	private List<Integer[]> currentLocationsOfA;
-	private List<Integer[]> currentLocationsOfB;
+	private TreeNode root;
 
 	private UploadedFile file;
 
@@ -90,6 +101,10 @@ public class FileUploadBean implements Serializable {
 		this.defaultDist = defaultDist;
 	}
 
+	public TreeNode getRoot() {
+		return root;
+	}
+
 	public void upload(FileUploadEvent event) {
 		this.fileToBeAnalyzed = null;
 		file = event.getFile();
@@ -98,6 +113,7 @@ public class FileUploadBean implements Serializable {
 			dirToSaveSubmisison = Files.createTempDirectory("saved_location").toFile();
 			Files.copy(input, new File(dirToSaveSubmisison, file.getFileName()).toPath());
 			this.fileToBeAnalyzed = dirToSaveSubmisison.toString() + "\\" + file.getFileName();
+			createRoot(uncompress(new File(this.fileToBeAnalyzed)).getPath(), "*.cpp");
 			FacesMessage message = new FacesMessage("Upload Succesful!",
 					event.getFile().getFileName() + " is uploaded to " + dirToSaveSubmisison);
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -106,6 +122,29 @@ public class FileUploadBean implements Serializable {
 		} finally {
 			dirToSaveSubmisison.deleteOnExit();
 		}
+	}
+
+	private void createRoot(String sourcePath, String pattern) throws IOException {
+		root = new DefaultTreeNode("Root", null);
+		BeanFinder finder = new BeanFinder(pattern);
+		Files.walkFileTree(Paths.get(sourcePath), finder);
+	}
+	
+	public File uncompress(File compressedFile) {
+		if (FileUtils.canUncompressPath(compressedFile)) {
+			File temp = null;
+			try {
+				temp = Files.createTempDirectory("ac-temp").toFile();
+				FileUtils.getArchiverFor(compressedFile.getPath()).expand(compressedFile, temp);
+				log.info("Files for " + compressedFile.getPath() + " now at " + temp.getPath());
+				compressedFile = temp;
+			} catch (IOException e) {
+				log.warn("error uncompressing bundled file for " + compressedFile, e);
+			} finally {
+				temp.deleteOnExit();
+			}
+		}
+		return compressedFile;
 	}
 
 	public void analyze() {
@@ -132,11 +171,11 @@ public class FileUploadBean implements Serializable {
 		if (subResults != null) {
 			lazyModel = new LazyResultDataModel(subResults);
 		}
+		root = null;
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Analyze Completed!"));
 	}
 
 	public LazyDataModel<Result> getResults() {
-//		return TestResultsDialog.results != null ? Arrays.asList(TestResultsDialog.results) : null;
 		return lazyModel;
 
 	}
@@ -146,21 +185,21 @@ public class FileUploadBean implements Serializable {
 			return null;
 		CompareDialog cd = new CompareDialog(subA, subB);
 		cd.wrapAndHighlight(10);
-		this.currentLocationsOfA = new ArrayList<>();
-		this.currentLocationsOfB = new ArrayList<>();
+		List<Integer[]> currentLocationsOfA = new ArrayList<>();
+		List<Integer[]> currentLocationsOfB = new ArrayList<>();
 
-		cd.getIntervalA().forEach(interval -> this.currentLocationsOfA.add(new Integer[] { interval.so, interval.eo }));
-		cd.getIntervalB().forEach(interval -> this.currentLocationsOfB.add(new Integer[] { interval.so, interval.eo }));
+		cd.getIntervalA().forEach(interval -> currentLocationsOfA.add(new Integer[] { interval.so, interval.eo }));
+		cd.getIntervalB().forEach(interval -> currentLocationsOfB.add(new Integer[] { interval.so, interval.eo }));
 
 		String submissionA = cd.getSourceA();
 		String submissionB = cd.getSourceB();
 
 		List<String> partOfSourceA = new ArrayList<>();
 		List<String> partOfSourceB = new ArrayList<>();
-		for (Integer[] location : this.currentLocationsOfA) {
+		for (Integer[] location : currentLocationsOfA) {
 			partOfSourceA.add(submissionA.substring(location[0], location[1]));
 		}
-		for (Integer[] location : this.currentLocationsOfB) {
+		for (Integer[] location : currentLocationsOfB) {
 			partOfSourceB.add(submissionB.substring(location[0], location[1]));
 		}
 
@@ -177,19 +216,43 @@ public class FileUploadBean implements Serializable {
 			return submissionB;
 	}
 
-	public List<Integer[]> getCurrentLocationsOfA() {
-		return currentLocationsOfA;
-	}
+	private class BeanFinder extends SimpleFileVisitor<Path> {
 
-	public void setCurrentLocationsOfA(List<Integer[]> currentLocationsOfA) {
-		this.currentLocationsOfA = currentLocationsOfA;
-	}
+		private final PathMatcher matcher;
+		private List<String> examCodes;
 
-	public List<Integer[]> getCurrentLocationsOfB() {
-		return currentLocationsOfB;
-	}
+		public BeanFinder(String pattern) {
+			examCodes = new ArrayList<>();
+			this.matcher = FileSystems.getDefault().getPathMatcher("glob:" + pattern);
+		}
 
-	public void setCurrentLocationsOfB(List<Integer[]> currentLocationsOfB) {
-		this.currentLocationsOfB = currentLocationsOfB;
+		void find(Path subFile) throws IOException {
+			if (subFile != null && matcher.matches(subFile.getFileName())) {
+				String examCode = subFile.getFileName().toString().substring(0,
+						subFile.getFileName().toString().indexOf("_"));
+				TreeNode examCodeNode = new DefaultTreeNode(examCode);
+				if (!examCodes.contains(examCode)) {
+					examCodes.add(examCode);
+					root.getChildren().add(examCodeNode);
+				}
+				root.getChildren().forEach(node ->{
+					if(node.getData().toString().equals(examCode)) {
+						node.getChildren().add(new DefaultTreeNode(subFile.getFileName().toString()));
+					}
+				});
+			}
+		}
+
+		@Override
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+			find(file);
+			return CONTINUE;
+		}
+
+		@Override
+		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+			find(dir);
+			return CONTINUE;
+		}
 	}
 }

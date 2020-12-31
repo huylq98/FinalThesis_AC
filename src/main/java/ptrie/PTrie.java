@@ -1,4 +1,4 @@
-package es.ucm.fdi.ac.ptrie;
+package ptrie;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +14,6 @@ public class PTrie {
 	private int minSubstringSize = 5;
 
 	private Node root;
-	private int size;
-
 	// optimization; allows storing start-end indexes ('substrings') in Nodes
 	private HashMap<Object, String> documents;
 
@@ -55,8 +53,6 @@ public class PTrie {
 	public Node find(String s) {
 
 		Node start = root;
-		boolean found = false;
-
 		// the inner loop iterates the tree
 		int offset = 0;
 		int len = s.length();
@@ -73,7 +69,7 @@ public class PTrie {
 				// found next node that starts that way
 
 				String nextData = next.getData();
-				int nextLen = nextData.length();
+				nextData.length();
 
 				for (int p = 0; p < next.getData().length(); p++) {
 					char a = s.charAt(offset + p);

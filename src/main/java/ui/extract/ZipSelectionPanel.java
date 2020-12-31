@@ -15,8 +15,6 @@ import core.extract.FileTreeNode;
 import core.expression.ExpressionListener;
 import core.expression.Expression;
 import ui.expression.CompositeExpressionPanel;
-import core.util.FileUtils;
-import core.util.SourceFileCache;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -170,36 +168,6 @@ public class ZipSelectionPanel {
 			}
 		}
 		selectedFilesModel.addSource(f);
-	}
-
-	public boolean uncompress(File dest) {
-		try {
-			if (!dest.exists()) {
-				dest.mkdirs();
-			}
-			for (FileTreeNode n : selectedFilesModel.getAllTerminals()) {
-				File p = ((FileTreeNode) n.getParent()).getFile();
-				File f = n.getFile();
-
-				String pname = p.getName();
-				String id = (pname.contains(".")) ? pname.substring(0, pname.lastIndexOf(".")) : pname;
-
-				File destDir = new File(dest, id);
-
-				if (!destDir.exists()) {
-					destDir.mkdir();
-				}
-
-				String name = f.getName();
-				String contents = SourceFileCache.getSource(f);
-
-				FileUtils.writeStringToFile(new File(destDir, name), contents);
-			}
-		} catch (IOException ioe) {
-			log.error("error uncompressing files", ioe);
-			return false;
-		}
-		return true;
 	}
 
 	public static void analyze() {

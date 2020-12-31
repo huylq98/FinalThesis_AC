@@ -11,22 +11,26 @@
 </h:head>
 <h:body>
 	<h:form id="mainForm" enctype="multipart/form-data">
-		<p:fileUpload value="#{fileUploadBean.file}"
-			listener="#{fileUploadBean.upload}" auto="true" update="@form" />
+		<p:fileUpload value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" skinSimple="true" mode="advanced" update="@form" />
 		<h:panelGrid>
 			<p:commandButton value="Analyze"
 				actionListener="#{fileUploadBean.analyze}"
 				rendered="#{fileUploadBean.fileToBeAnalyzed ne null}"
 				onclick="PF('pbAjax').start();PF('analyzeBtn').disable();"
-				widgetVar="analyzeBtn" />
-			<p:progressBar widgetVar="pbAjax" ajax="true"
-				value="#{fileUploadBean.progress}" labelTemplate="{value}%"
-				styleClass="animated" global="false">
-				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}"
-					update="@form" oncomplete="PF('analyzeBtn').enable()" />
+				widgetVar="analyzeBtn"
+				update="@form" />
+			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false">
+				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}" update="@form" oncomplete="PF('analyzeBtn').enable()" />
 			</p:progressBar>
 		</h:panelGrid>
 		<p:growl id="message" />
+		
+		<p:tree value="#{fileUploadBean.root}" var="node" dynamic="true" rendered="#{not empty fileUploadBean.root}">
+	        <p:treeNode>
+	            <h:outputText value="#{node}" />
+	        </p:treeNode>
+    	</p:tree>
+		
 		<p:dataTable var="result" value="#{fileUploadBean.lazyModel}"
 			selection="#{fileUploadBean.selectedAnalysis}" lazy="true"
 			emptyMessage="No submissions found" paginator="true"

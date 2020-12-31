@@ -80,7 +80,7 @@ public class Main {
 
 	public static void filterFile(String sourcePath, String pattern) throws IOException {
 		startingDir = Paths.get(sourcePath);
-		Finder finder = new Finder("C:\\Users\\Admin\\OneDrive\\Desktop\\Test", pattern, allDir);
+		Finder finder = new Finder("C:\\Users\\synergix206\\Downloads\\Test", pattern, allDir);
 		Files.walkFileTree(startingDir, finder);
 	}
 }

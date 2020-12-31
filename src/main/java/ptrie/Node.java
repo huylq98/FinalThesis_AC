@@ -1,4 +1,4 @@
-package es.ucm.fdi.ac.ptrie;
+package ptrie;
 
 import java.util.ArrayList;
 import java.util.HashMap;

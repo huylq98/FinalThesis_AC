@@ -50,7 +50,7 @@
  *
  */
 
-package es.ucm.fdi.ac.ptrie;
+package ptrie;
 
 /**
  * A very simple container class for base+offset pairs

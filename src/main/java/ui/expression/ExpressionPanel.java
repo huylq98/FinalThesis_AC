@@ -31,10 +31,6 @@ public abstract class ExpressionPanel {
 		el.add(l);
 	}
 
-	public void removeExpressionListener(ExpressionListener l) {
-		el.remove(l);
-	}
-
 	private ArrayList<ExpressionListener> getExpressionListeners() {
 		ArrayList<ExpressionListener> list = el;
 		ExpressionPanel ep = this;
