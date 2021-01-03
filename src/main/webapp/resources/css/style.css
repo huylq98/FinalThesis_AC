@@ -1,14 +1,12 @@
-* {
+body {
 	margin: 0;
 	padding: 0;
 }
 
-/*========== FileUpload ==========*/
+.ui-button-text {
+	font-size: 15px;
+}
 
-
-
-/*====================*/
-
-.preformatted {
-    white-space: pre;
+.ui-fileupload-buttonbar {
+	background-color: ffb26b;
 }

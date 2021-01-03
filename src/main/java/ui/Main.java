@@ -39,7 +39,6 @@ public class Main {
 		I18N.setLang(Locale.getDefault().getLanguage());
 		start = Instant.now();
 		try {
-//					File source = new File("C:\\Users\\Admin\\Downloads\\101.zip");
 			File source = new File(args[0]);
 			if (FileUtils.canUncompressPath(source)) {
 				File temp = null;
@@ -80,7 +79,7 @@ public class Main {
 
 	public static void filterFile(String sourcePath, String pattern) throws IOException {
 		startingDir = Paths.get(sourcePath);
-		Finder finder = new Finder("C:\\Users\\synergix206\\Downloads\\Test", pattern, allDir);
+		Finder finder = new Finder("C:\\Users\\Admin\\OneDrive\\Desktop\\Test", pattern, allDir);
 		Files.walkFileTree(startingDir, finder);
 	}
 }

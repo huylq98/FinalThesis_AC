@@ -106,9 +106,9 @@ public class FileUploadBean implements Serializable {
 	}
 
 	public void upload(FileUploadEvent event) {
-		this.fileToBeAnalyzed = null;
 		file = event.getFile();
 		File dirToSaveSubmisison = null;
+		progress = 1;
 		try (InputStream input = file.getInputStream()) {
 			dirToSaveSubmisison = Files.createTempDirectory("saved_location").toFile();
 			Files.copy(input, new File(dirToSaveSubmisison, file.getFileName()).toPath());
@@ -153,10 +153,10 @@ public class FileUploadBean implements Serializable {
 		}
 	}
 
-	public static Integer progress = 1;
+	public static int progress = 1;
 
 	public Integer getProgress() {
-		if (progress == null || Main.allDir.size() == 0) {
+		if (Main.allDir.size() == 0) {
 			return 0;
 		}
 

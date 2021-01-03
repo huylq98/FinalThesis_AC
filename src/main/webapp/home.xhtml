@@ -7,9 +7,59 @@
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<title>AC PTIT</title>
-	<h:outputStylesheet name="css/style.css"></h:outputStylesheet>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+		
+		body {
+			margin: 0;
+			padding: 0;
+			font-family:'Source Sans Pro', sans-serif;
+		}
+		
+		.ui-widget {
+			font-family:'Source Sans Pro', sans-serif;
+		}
+		
+		.ui-button-text {
+			font-size: 15px;
+		}
+		
+		.ui-widget-header {
+			background: #000;
+		}
+		
+		.ui-paginator-current {
+			font-weight: 400;
+			color: #fff;
+		}
+		
+		.ui-button {
+			background-color: #fff;
+			color: #ffb26b;
+		}
+		
+		.ui-datatable .ui-sortable-column {
+			background: #000;
+			color: #fff;
+			font-weight: 400;
+		}
+		
+		tr {
+			text-align: center;
+		}
+		
+		.ui-datatable tbody td {
+			padding: 18px 0;
+			border-color: transparent;
+		}
+		
+		.ui-datatable-odd {
+    		background: none repeat scroll 0 0 #EEEEEE;
+		}
+	</style>
 </h:head>
 <h:body>
+	<h:outputStylesheet library="css" name="css/style.css"/>
 	<h:form id="mainForm" enctype="multipart/form-data">
 		<p:fileUpload value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" skinSimple="true" mode="advanced" update="@form" />
 		<h:panelGrid>
@@ -18,8 +68,8 @@
 				rendered="#{fileUploadBean.fileToBeAnalyzed ne null}"
 				onclick="PF('pbAjax').start();PF('analyzeBtn').disable();"
 				widgetVar="analyzeBtn"
-				update="@form" />
-			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false">
+				update="@form"/>
+			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false" interval="1000">
 				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}" update="@form" oncomplete="PF('analyzeBtn').enable()" />
 			</p:progressBar>
 		</h:panelGrid>
@@ -38,14 +88,15 @@
 			rows="20" rowsPerPageTemplate="15,20,25" selectionMode="single"
 			scrollable="true" scrollHeight="500" widgetVar="dataTableWidgetVar"
 			filteredValue="#{fileUploadBean.filteredSubResults}"
-			rendered="#{fileUploadBean.results ne null}">
+			rendered="#{fileUploadBean.results ne null}"
+			styleClass="result-table">
 			<p:ajax event="rowSelect" update=":mainForm:resultDetail"
 				oncomplete="PF('resultDialog').show()" />
-			<p:column headerText="Submission A">
+			<p:column headerText="Submission A" sortBy="#{result.a}">
 				<h:outputText value="#{result.a}" />
 			</p:column>
 
-			<p:column headerText="Submission B">
+			<p:column headerText="Submission B" sortBy="#{result.b}">
 				<h:outputText value="#{result.b}" />
 			</p:column>
 

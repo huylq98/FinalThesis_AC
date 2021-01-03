@@ -22,20 +22,18 @@ public class AntlrTokenizerFactory implements Analysis.TokenizerFactory {
         if (tokenizers != null) return;
 
         tokenizers = new HashMap<>();
-        AntlrTokenizer java = new AntlrTokenizer("es.ucm.fdi.ac.lexers.Java", "compilationUnit");
+        AntlrTokenizer java = new AntlrTokenizer("lexers.Java", "compilationUnit");
         tokenizers.put("java", java);
-        AntlrTokenizer cpp14 = new AntlrTokenizer("es.ucm.fdi.ac.lexers.CPP14", "translationunit");
+        AntlrTokenizer cpp14 = new AntlrTokenizer("lexers.CPP14", "translationunit");
         tokenizers.put("(c|cpp|cxx|h)", cpp14);
-        AntlrTokenizer vhdl = new AntlrTokenizer("es.ucm.fdi.ac.lexers.vhdl", "design_file");
-        tokenizers.put("(vhdl|vhd)", vhdl);
-        AntlrTokenizer php = new AntlrTokenizer("es.ucm.fdi.ac.lexers.PHP", "htmlDocument");
-        tokenizers.put("(php)", php);
-        AntlrTokenizer xml = new AntlrTokenizer("es.ucm.fdi.ac.lexers.XML", "document");
-        tokenizers.put("(xml|html)", xml);
-        AntlrTokenizer js = new AntlrTokenizer("es.ucm.fdi.ac.lexers.ECMAScript", "program");
-        tokenizers.put("(js)", js);
-        AntlrTokenizer python = new AntlrTokenizer("es.ucm.fdi.ac.lexers.Python", "root");
-        tokenizers.put("(py)", python);
+//        AntlrTokenizer php = new AntlrTokenizer("lexers.PHP", "htmlDocument");
+//        tokenizers.put("(php)", php);
+//        AntlrTokenizer xml = new AntlrTokenizer("lexers.XML", "document");
+//        tokenizers.put("(xml|html)", xml);
+//        AntlrTokenizer js = new AntlrTokenizer("lexers.ECMAScript", "program");
+//        tokenizers.put("(js)", js);
+//        AntlrTokenizer python = new AntlrTokenizer("lexers.Python", "root");
+//        tokenizers.put("(py)", python);
     }
 
 	@Override

@@ -15,6 +15,7 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- logging, using log4j2 directly -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -26,6 +27,7 @@
 			<artifactId>log4j-api</artifactId>
 			<version>2.13.3</version>
 		</dependency>
+
 		<!-- logging, via commons-logging bridge -->
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -37,30 +39,35 @@
 			<artifactId>log4j-jcl</artifactId>
 			<version>2.13.3</version>
 		</dependency>
+
 		<!-- charset detection -->
 		<dependency>
 			<groupId>com.ibm.icu</groupId>
 			<artifactId>icu4j</artifactId>
 			<version>57.1</version>
 		</dependency>
-		<!-- zip (better than JDK), bzip2, tar, 7z -->
+
+		<!-- zip, bzip2, tar, 7z -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
 			<version>1.20</version>
 		</dependency>
+
 		<!-- unrar -->
 		<dependency>
 			<groupId>com.github.junrar</groupId>
 			<artifactId>junrar</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+
 		<!-- xml-backed persistence -->
 		<dependency>
 			<groupId>org.jdom</groupId>
 			<artifactId>jdom2</artifactId>
 			<version>2.0.5</version>
 		</dependency>
+
 		<!-- We need to have the ANTLR runtime jar when running and compiling. -->
 		<dependency>
 			<groupId>org.antlr</groupId>
@@ -68,6 +75,7 @@
 			<version>4.5.3</version>
 			<scope>compile</scope>
 		</dependency>
+
 		<!-- JSF -->
 		<dependency>
 			<groupId>com.sun.faces</groupId>
@@ -79,6 +87,7 @@
 			<artifactId>jsf-impl</artifactId>
 			<version>2.2.20</version>
 		</dependency>
+
 		<!-- CDI -->
 		<!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
 		<dependency>
@@ -92,6 +101,7 @@
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>
 		</dependency>
+
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -109,6 +119,7 @@
 			<artifactId>jstl</artifactId>
 			<version>1.1.2</version>
 		</dependency>
+
 		<!-- PrimeFaces -->
 		<!-- https://mvnrepository.com/artifact/org.primefaces/primefaces -->
 		<dependency>
@@ -119,5 +130,20 @@
 	</dependencies>
 	<build>
 		<finalName>ac_ptit</finalName>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.5.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>
