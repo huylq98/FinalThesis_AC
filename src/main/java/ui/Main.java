@@ -35,6 +35,26 @@ public class Main {
 	public static List<Path> allDir = new ArrayList<>();
 	public static Instant start;
 
+	public static void analyze(String filter, File source) {
+		I18N.setLang(Locale.getDefault().getLanguage());
+		start = Instant.now();
+		try {
+			filterFile(source.getPath(), filter);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		allDir.forEach(f -> {
+			main = new MainGui();
+			ZipSelectionPanel zsp = new ZipSelectionPanel();
+			zsp.addSourceFile(f.toFile());
+			zsp.filterPanel
+				.addExpression(f.getFileName().toString() + "_B");
+			zsp.filterPanel.confirm();
+			ZipSelectionPanel.analyze();
+			main.launchTest(new NCDTest(new ZipFormat()), true);
+		});
+	}
+	
 	public static void main(String args[]) {
 		I18N.setLang(Locale.getDefault().getLanguage());
 		start = Instant.now();
@@ -53,7 +73,7 @@ public class Main {
 					temp.deleteOnExit();
 				}
 			}
-			filterFile(source.getPath(), "*.cpp");
+			filterFile(source.getPath(), args[1]);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -66,11 +86,6 @@ public class Main {
 			ZipSelectionPanel.analyze();
 			main.launchTest(new NCDTest(new ZipFormat()), true);
 		});
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static void selectionConfirmed(SourceSet ss) {

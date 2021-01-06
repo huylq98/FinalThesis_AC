@@ -24,10 +24,6 @@
 			font-size: 15px;
 		}
 		
-		.ui-widget-header {
-			background: #000;
-		}
-		
 		.ui-paginator-current {
 			font-weight: 400;
 			color: #fff;
@@ -56,12 +52,59 @@
 		.ui-datatable-odd {
     		background: none repeat scroll 0 0 #EEEEEE;
 		}
+		
+		.preformatted {
+    		white-space: pre;
+    		text-align: left;
+		}
+		
+		.ptit-logo {
+			position: absolute;
+			top: 30%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			filter: drop-shadow(0px 5px 2px black);
+			animation: drop 1.5s ease;
+		}
+			
+		@keyframes drop {
+			0% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 1;
+			}
+		}
+		
+		.upload-button {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		
+		.ui-fileupload-buttonbar {
+			padding: 0;
+		}
+		
+		.ui-fileupload-choose {
+			width: 100%;
+			background-color: #fff !important;
+			color: #ffb26b !important;
+		}
+		
+		.ui-fileupload-content, .ui-fileupload-progress {
+			display: none;
+		}
 	</style>
 </h:head>
 <h:body>
 	<h:outputStylesheet library="css" name="css/style.css"/>
+	
+	<p:graphicImage name="img/ptit_logo.png" styleClass="ptit-logo"/>
+	
 	<h:form id="mainForm" enctype="multipart/form-data">
-		<p:fileUpload value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" skinSimple="true" mode="advanced" update="@form" />
+		<p:fileUpload label="Import File" value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" skinSimple="true" update="@form" styleClass="upload-button"/>
 		<h:panelGrid>
 			<p:commandButton value="Analyze"
 				actionListener="#{fileUploadBean.analyze}"
@@ -118,13 +161,12 @@
 			<p:panelGrid id="resultDetail" columns="2">
 				<h:outputText value="#{fileUploadBean.selectedAnalysis.a}" />
 				<h:outputText value="#{fileUploadBean.selectedAnalysis.b}" />
-
-				<p:scrollPanel style="width:500px;height:500px">
+				<p:scrollPanel style="width:500px;height:500px;text-align:left;">
 					<h:outputText
 						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a, fileUploadBean.selectedAnalysis.b, true)}"
 						styleClass="preformatted" escape="false" />
 				</p:scrollPanel>
-				<p:scrollPanel style="width:500px;height:500px">
+				<p:scrollPanel style="width:500px;height:500px;text-align:left;">
 					<h:outputText
 						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a,
 						fileUploadBean.selectedAnalysis.b, false)}"

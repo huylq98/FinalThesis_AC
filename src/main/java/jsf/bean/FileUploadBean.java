@@ -54,6 +54,7 @@ public class FileUploadBean implements Serializable {
 	private Float defaultDist = 0.5f;
 	private LazyDataModel<Result> lazyModel;
 	private TreeNode root;
+	private File uncompressedFile;
 
 	private UploadedFile file;
 
@@ -113,7 +114,9 @@ public class FileUploadBean implements Serializable {
 			dirToSaveSubmisison = Files.createTempDirectory("saved_location").toFile();
 			Files.copy(input, new File(dirToSaveSubmisison, file.getFileName()).toPath());
 			this.fileToBeAnalyzed = dirToSaveSubmisison.toString() + "\\" + file.getFileName();
-			createRoot(uncompress(new File(this.fileToBeAnalyzed)).getPath(), "*.cpp");
+			
+			this.uncompressedFile = uncompress(new File(this.fileToBeAnalyzed));
+			createRoot(this.uncompressedFile.getPath(), "*.cpp");
 			FacesMessage message = new FacesMessage("Upload Succesful!",
 					event.getFile().getFileName() + " is uploaded to " + dirToSaveSubmisison);
 			FacesContext.getCurrentInstance().addMessage(null, message);
@@ -149,7 +152,7 @@ public class FileUploadBean implements Serializable {
 
 	public void analyze() {
 		if (this.fileToBeAnalyzed != null) {
-			Main.main(new String[] { this.fileToBeAnalyzed });
+			Main.analyze("*.cpp", this.uncompressedFile);
 		}
 	}
 
