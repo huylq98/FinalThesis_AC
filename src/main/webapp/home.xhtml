@@ -60,7 +60,7 @@
 		
 		.ptit-logo {
 			position: absolute;
-			top: 30%;
+			top: 20%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 			filter: drop-shadow(0px 5px 2px black);
@@ -78,7 +78,7 @@
 		
 		.upload-button {
 			position: absolute;
-			top: 50%;
+			top: 35%;
 			left: 50%;
 			transform: translate(-50%, -50%);
 		}
@@ -96,33 +96,51 @@
 		.ui-fileupload-content, .ui-fileupload-progress {
 			display: none;
 		}
+		
+		.analyze-panel {
+			position: absolute;
+			top: 35%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		
+		.submissions-tree {
+			position: absolute;
+			top: 65%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			height: 450px;
+			overflow: auto;
+			display: block;
+		}
 	</style>
 </h:head>
 <h:body>
 	<h:outputStylesheet library="css" name="css/style.css"/>
 	
-	<p:graphicImage name="img/ptit_logo.png" styleClass="ptit-logo"/>
-	
 	<h:form id="mainForm" enctype="multipart/form-data">
-		<p:fileUpload label="Import File" value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" skinSimple="true" update="@form" styleClass="upload-button"/>
-		<h:panelGrid>
+		<p:graphicImage name="img/ptit_logo.png" styleClass="ptit-logo" rendered="#{empty fileUploadBean.results}" />
+		<p:fileUpload label="Import File" value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" update="@form" styleClass="upload-button" rendered="#{empty fileUploadBean.fileToBeAnalyzed}"/>
+		<p:outputPanel styleClass="analyze-panel" rendered="#{not empty fileUploadBean.fileToBeAnalyzed and not empty fileUploadBean.root}">
 			<p:commandButton value="Analyze"
 				actionListener="#{fileUploadBean.analyze}"
-				rendered="#{fileUploadBean.fileToBeAnalyzed ne null}"
 				onclick="PF('pbAjax').start();PF('analyzeBtn').disable();"
 				widgetVar="analyzeBtn"
 				update="@form"/>
 			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false" interval="1000">
-				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}" update="@form" oncomplete="PF('analyzeBtn').enable()" />
+				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}" update="@form" />
 			</p:progressBar>
-		</h:panelGrid>
+		</p:outputPanel>
+		
 		<p:growl id="message" />
 		
-		<p:tree value="#{fileUploadBean.root}" var="node" dynamic="true" rendered="#{not empty fileUploadBean.root}">
-	        <p:treeNode>
-	            <h:outputText value="#{node}" />
-	        </p:treeNode>
-    	</p:tree>
+		<p:outputPanel styleClass="submissions-tree" rendered="#{not empty fileUploadBean.root}">
+			<p:tree value="#{fileUploadBean.root}" var="node" dynamic="true">
+		        <p:treeNode>
+		            <h:outputText value="#{node}" />
+		        </p:treeNode>
+	    	</p:tree>
+		</p:outputPanel>
 		
 		<p:dataTable var="result" value="#{fileUploadBean.lazyModel}"
 			selection="#{fileUploadBean.selectedAnalysis}" lazy="true"

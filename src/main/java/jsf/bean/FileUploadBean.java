@@ -152,7 +152,7 @@ public class FileUploadBean implements Serializable {
 
 	public void analyze() {
 		if (this.fileToBeAnalyzed != null) {
-			Main.analyze("*.cpp", this.uncompressedFile);
+			Main.analyze("*", this.uncompressedFile);
 		}
 	}
 
@@ -207,11 +207,11 @@ public class FileUploadBean implements Serializable {
 		}
 
 		for (String part : partOfSourceA) {
-			submissionA = submissionA.replace(part, "<span style=\"background-color: yellow;\">" + part + "</span>");
+			submissionA = submissionA.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
 		}
 
 		for (String part : partOfSourceB) {
-			submissionB = submissionB.replace(part, "<span style=\"background-color: yellow;\">" + part + "</span>");
+			submissionB = submissionB.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
 		}
 		if (sel)
 			return submissionA;
