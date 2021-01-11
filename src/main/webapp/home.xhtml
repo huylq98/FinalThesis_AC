@@ -113,6 +113,14 @@
 			overflow: auto;
 			display: block;
 		}
+		
+		.result-panel {
+			margin-top: 10px;
+			margin-left: auto;
+			margin-right: auto;
+			font-size: 25px;
+			text-align: center;
+		}
 	</style>
 </h:head>
 <h:body>
@@ -121,20 +129,20 @@
 	<h:form id="mainForm" enctype="multipart/form-data">
 		<p:graphicImage name="img/ptit_logo.png" styleClass="ptit-logo" rendered="#{empty fileUploadBean.results}" />
 		<p:fileUpload label="Import File" value="#{fileUploadBean.file}" listener="#{fileUploadBean.upload}" auto="true" update="@form" styleClass="upload-button" rendered="#{empty fileUploadBean.fileToBeAnalyzed}"/>
-		<p:outputPanel styleClass="analyze-panel" rendered="#{not empty fileUploadBean.fileToBeAnalyzed and not empty fileUploadBean.root}">
+		<p:outputPanel styleClass="analyze-panel" rendered="#{not empty fileUploadBean.fileToBeAnalyzed and not empty fileUploadBean.root and fileUploadBean.results eq null}">
 			<p:commandButton value="Analyze"
 				actionListener="#{fileUploadBean.analyze}"
 				onclick="PF('pbAjax').start();PF('analyzeBtn').disable();"
 				widgetVar="analyzeBtn"
 				update="@form"/>
-			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" labelTemplate="{value}%" styleClass="animated" global="false" interval="1000">
+			<p:progressBar widgetVar="pbAjax" ajax="true" value="#{fileUploadBean.progress}" styleClass="animated" global="false" interval="1000">
 				<p:ajax event="complete" listener="#{fileUploadBean.onComplete}" update="@form" />
 			</p:progressBar>
 		</p:outputPanel>
 		
 		<p:growl id="message" />
 		
-		<p:outputPanel styleClass="submissions-tree" rendered="#{not empty fileUploadBean.root}">
+		<p:outputPanel styleClass="submissions-tree" rendered="#{not empty fileUploadBean.root and fileUploadBean.results eq null}">
 			<p:tree value="#{fileUploadBean.root}" var="node" dynamic="true">
 		        <p:treeNode>
 		            <h:outputText value="#{node}" />
@@ -142,57 +150,8 @@
 	    	</p:tree>
 		</p:outputPanel>
 		
-		<p:dataTable var="result" value="#{fileUploadBean.lazyModel}"
-			selection="#{fileUploadBean.selectedAnalysis}" lazy="true"
-			emptyMessage="No submissions found" paginator="true"
-			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
-			rows="20" rowsPerPageTemplate="15,20,25" selectionMode="single"
-			scrollable="true" scrollHeight="500" widgetVar="dataTableWidgetVar"
-			filteredValue="#{fileUploadBean.filteredSubResults}"
-			rendered="#{fileUploadBean.results ne null}"
-			styleClass="result-table">
-			<p:ajax event="rowSelect" update=":mainForm:resultDetail"
-				oncomplete="PF('resultDialog').show()" />
-			<p:column headerText="Submission A" sortBy="#{result.a}">
-				<h:outputText value="#{result.a}" />
-			</p:column>
-
-			<p:column headerText="Submission B" sortBy="#{result.b}">
-				<h:outputText value="#{result.b}" />
-			</p:column>
-
-			<p:column headerText="Distance" sortBy="#{result.dist}"
-				filterBy="#{result.dist}" filterMatchMode="lte">
-				<f:facet name="filter">
-					<p:spinner value="#{fileUploadBean.defaultDist}" onchange="PF('dataTableWidgetVar').filter()" min="0"
-						max="1" stepFactor="0.01">
-						<f:converter converterId="javax.faces.Float" />
-					</p:spinner>
-				</f:facet>
-				<h:outputText value="#{result.dist}" />
-			</p:column>
-		</p:dataTable>
-
-
-		<p:dialog widgetVar="resultDialog" modal="true" showEffect="fade"
-			hideEffect="fade">
-			<p:panelGrid id="resultDetail" columns="2">
-				<h:outputText value="#{fileUploadBean.selectedAnalysis.a}" />
-				<h:outputText value="#{fileUploadBean.selectedAnalysis.b}" />
-				<p:scrollPanel style="width:500px;height:500px;text-align:left;">
-					<h:outputText
-						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a, fileUploadBean.selectedAnalysis.b, true)}"
-						styleClass="preformatted" escape="false" />
-				</p:scrollPanel>
-				<p:scrollPanel style="width:500px;height:500px;text-align:left;">
-					<h:outputText
-						value="#{fileUploadBean.getSubmissionSource(fileUploadBean.selectedAnalysis.a,
-						fileUploadBean.selectedAnalysis.b, false)}"
-						styleClass="preformatted" escape="false"/>
-				</p:scrollPanel>
-				
-			</p:panelGrid>
-		</p:dialog>
+		<ui:include src="result-table.xhtml"/>
+		
 	</h:form>
 </h:body>
 </html>

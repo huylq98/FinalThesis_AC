@@ -51,8 +51,7 @@ public class SourceSet implements XMLSerializable {
 	 * @param dn
 	 */
 	public SourceSet(FileTreeNode dn) throws IOException {
-		File d = Files.createTempDirectory("ac-").toFile();
-		d.deleteOnExit();
+		File d = Files.createTempDirectory("sourceset-temp").toFile();
 		export(dn, d);
 		log.info("Exported sources to " + d.getAbsolutePath());
 
@@ -61,6 +60,7 @@ public class SourceSet implements XMLSerializable {
 			roots.addSource(root);
 		}
 		filteredTree = (FileTreeNode) roots.getRoot();
+		d.delete();
 	}
 
 	public Element saveToXML() throws IOException {

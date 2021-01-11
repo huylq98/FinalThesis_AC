@@ -79,15 +79,17 @@ public class FileTreeNode implements MutableTreeNode, Comparable<FileTreeNode> {
 				throw new IllegalArgumentException(
 						"Cannot list archive: unrecognized format");
 			}
+			File temp = null;
             try {
-                File temp = Files.createTempDirectory("ac-temp").toFile();
-                temp.deleteOnExit();
+                temp = Files.createTempDirectory("treenode-temp").toFile();
                 FileUtils.getArchiverFor(f.getPath()).expand(f, temp);
                 this.original = f;
                 this.f = temp;
                 log.info("Files for " + original.getPath() + " now at " + f.getPath());
             } catch (IOException ioe) {
                 log.warn("error uncompressing bundled file for " + f, ioe);
+            } finally {
+            	temp.delete();
             }
 		}
 	}

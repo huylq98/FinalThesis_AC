@@ -64,7 +64,8 @@ public class GraphicalAnalysis implements ActionListener {
 		if (isTestFinished) {
 			t.stop();
 			FileUploadBean.progress++;
-			log.info("Total time: " + Duration.between(Main.start, Instant.now()).toMillis() + "ms");
+			FileUploadBean.totalTime = Duration.between(Main.start, Instant.now()).toMillis();
+			log.info("Total time: " + FileUploadBean.totalTime + "ms");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

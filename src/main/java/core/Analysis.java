@@ -96,13 +96,17 @@ public class Analysis implements XMLSerializable {
 				s.addSource(fn.getFile());
 			}
 
-			if (!unique.containsKey(s.getHash())) {
-				unique.put(s.getHash(), s);
+			String uniqueId = s.getId().substring(s.getId().indexOf('_') + 1, s.getId().lastIndexOf('_'));
+			if (!unique.containsKey(uniqueId)) {
+				unique.put(uniqueId, s);
 				s.setInternalId(i++);
 			} else {
-				Submission p = unique.get(s.getHash());
-				log.warn("Detected EXACT duplicate: " + s.getHash() + "\n" + " - " + p.getId() + " ("
-						+ p.getOriginalPath() + ")\n" + " - " + s.getId() + " (" + s.getOriginalPath() + ")\n");
+				String prevSub = unique.get(uniqueId).getId();
+				Integer prevSubId = Integer.parseInt(prevSub.substring(prevSub.lastIndexOf('_') + 1));
+				if(Integer.parseInt(s.getId().substring(s.getId().lastIndexOf('_') + 1)) > prevSubId){
+					unique.put(uniqueId, s);
+				}
+				log.warn("Detected EXACT duplicate.");
 			}
 		}
 

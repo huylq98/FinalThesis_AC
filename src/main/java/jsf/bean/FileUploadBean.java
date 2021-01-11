@@ -19,7 +19,9 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -35,8 +37,8 @@ import org.primefaces.model.TreeNode;
 import org.primefaces.model.file.UploadedFile;
 
 import core.Analysis.Result;
-import core.util.FileUtils;
 import core.Submission;
+import core.util.FileUtils;
 import jsf.lazymodel.LazyResultDataModel;
 import ui.Main;
 import ui.gui.CompareDialog;
@@ -51,10 +53,11 @@ public class FileUploadBean implements Serializable {
 	public static List<Result> subResults = new ArrayList<>();
 	private Result selectedAnalysis;
 	private LazyDataModel<Result> filteredSubResults;
-	private Float defaultDist = 0.5f;
+	private Double defaultDist = 0.37;
 	private LazyDataModel<Result> lazyModel;
 	private TreeNode root;
 	private File uncompressedFile;
+	public static long totalTime;
 
 	private UploadedFile file;
 
@@ -64,6 +67,10 @@ public class FileUploadBean implements Serializable {
 
 	public void setFile(UploadedFile file) {
 		this.file = file;
+	}
+
+	public List<Result> getSubResults() {
+		return subResults;
 	}
 
 	public LazyDataModel<Result> getLazyModel() {
@@ -94,11 +101,11 @@ public class FileUploadBean implements Serializable {
 		this.filteredSubResults = filteredSubResults;
 	}
 
-	public Float getDefaultDist() {
+	public Double getDefaultDist() {
 		return defaultDist;
 	}
 
-	public void setDefaultDist(Float defaultDist) {
+	public void setDefaultDist(Double defaultDist) {
 		this.defaultDist = defaultDist;
 	}
 
@@ -109,21 +116,19 @@ public class FileUploadBean implements Serializable {
 	public void upload(FileUploadEvent event) {
 		file = event.getFile();
 		File dirToSaveSubmisison = null;
-		progress = 1;
+		progress = 0;
 		try (InputStream input = file.getInputStream()) {
-			dirToSaveSubmisison = Files.createTempDirectory("saved_location").toFile();
+			dirToSaveSubmisison = Files.createTempDirectory("saved-temp").toFile();
 			Files.copy(input, new File(dirToSaveSubmisison, file.getFileName()).toPath());
 			this.fileToBeAnalyzed = dirToSaveSubmisison.toString() + "\\" + file.getFileName();
-			
-			this.uncompressedFile = uncompress(new File(this.fileToBeAnalyzed));
+
+			uncompressedFile = uncompress(new File(this.fileToBeAnalyzed));
 			createRoot(this.uncompressedFile.getPath(), "*.cpp");
-			FacesMessage message = new FacesMessage("Upload Succesful!",
-					event.getFile().getFileName() + " is uploaded to " + dirToSaveSubmisison);
-			FacesContext.getCurrentInstance().addMessage(null, message);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Upload Succesful!"));
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		} finally {
-			dirToSaveSubmisison.deleteOnExit();
+			dirToSaveSubmisison.delete();
 		}
 	}
 
@@ -132,19 +137,19 @@ public class FileUploadBean implements Serializable {
 		BeanFinder finder = new BeanFinder(pattern);
 		Files.walkFileTree(Paths.get(sourcePath), finder);
 	}
-	
+
 	public File uncompress(File compressedFile) {
 		if (FileUtils.canUncompressPath(compressedFile)) {
 			File temp = null;
 			try {
-				temp = Files.createTempDirectory("ac-temp").toFile();
+				temp = Files.createTempDirectory("compressed-temp").toFile();
 				FileUtils.getArchiverFor(compressedFile.getPath()).expand(compressedFile, temp);
 				log.info("Files for " + compressedFile.getPath() + " now at " + temp.getPath());
 				compressedFile = temp;
 			} catch (IOException e) {
 				log.warn("error uncompressing bundled file for " + compressedFile, e);
 			} finally {
-				temp.deleteOnExit();
+				temp.delete();
 			}
 		}
 		return compressedFile;
@@ -152,17 +157,17 @@ public class FileUploadBean implements Serializable {
 
 	public void analyze() {
 		if (this.fileToBeAnalyzed != null) {
-			Main.analyze("*", this.uncompressedFile);
+			Main.analyze("*.cpp", this.uncompressedFile);
 		}
 	}
 
-	public static int progress = 1;
+	public static int progress = 0;
 
 	public Integer getProgress() {
 		if (Main.allDir.size() == 0) {
 			return 0;
 		}
-
+		if(progress == Main.allDir.size()) return 100;
 		return Math.round((Float.parseFloat(String.valueOf(progress)) / Main.allDir.size()) * 100);
 	}
 
@@ -170,11 +175,42 @@ public class FileUploadBean implements Serializable {
 		progress = progressVal;
 	}
 
+	public int getTotalSubs() {
+		int total = 0;
+		for (TreeNode child : this.root.getChildren()) {
+			total += child.getChildCount();
+		}
+		return total;
+	}
+	
+	public int getTotalCopiedSubs() {
+		Set<String> results = new HashSet<>();
+		String idA;
+		String idB;
+		for(Result r : subResults) {
+			if(r.dist <= defaultDist) {
+				idA = r.a.getId();
+				idB = r.b.getId();
+				
+				results.add(idA.substring(idA.indexOf('_') + 1 , idA.lastIndexOf('_')));
+				results.add(idB.substring(idB.indexOf('_') + 1 , idB.lastIndexOf('_')));
+			}
+		}
+		return results.size();
+	}
+	
+	public float getCopyPercent() {
+		return (float) getTotalCopiedSubs()/getTotalSubs() * 100f;
+	}
+	
+	public long getTotalTime() {
+		return totalTime;
+	}
+
 	public void onComplete() {
 		if (subResults != null) {
 			lazyModel = new LazyResultDataModel(subResults);
 		}
-		root = null;
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Analyze Completed!"));
 	}
 
@@ -238,8 +274,8 @@ public class FileUploadBean implements Serializable {
 					examCodes.add(examCode);
 					root.getChildren().add(examCodeNode);
 				}
-				root.getChildren().forEach(node ->{
-					if(node.getData().toString().equals(examCode)) {
+				root.getChildren().forEach(node -> {
+					if (node.getData().toString().equals(examCode)) {
 						node.getChildren().add(new DefaultTreeNode(subFile.getFileName().toString()));
 					}
 				});

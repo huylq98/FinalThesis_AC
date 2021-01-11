@@ -28,7 +28,6 @@ public class LazyResultDataModel extends LazyDataModel<Result> {
 	                return result;
 	            }
 	        }
-	 
 	        return null;
 	    }
 	 
@@ -49,9 +48,9 @@ public class LazyResultDataModel extends LazyDataModel<Result> {
 	            	if(filterMeta.isEmpty()) {
 						try {
 							  String filterField = "dist";
-		                        Object filterValue = 0.5;
+		                        Object filterValue = 0.37;
 		                        String fieldValue = String.valueOf(result.getClass().getField(filterField).get(result));
-		                        if (filterValue == null || Float.parseFloat(fieldValue) <= Float.parseFloat(filterValue.toString())) {
+		                        if (filterValue == null || Double.parseDouble(fieldValue) <= Double.parseDouble(filterValue.toString())) {
 		                            match = true;
 		                        }
 		                        else {
@@ -69,7 +68,7 @@ public class LazyResultDataModel extends LazyDataModel<Result> {
 	                        Object filterValue = meta.getFilterValue();
 	                        String fieldValue = String.valueOf(result.getClass().getField(filterField).get(result));
 	 
-	                        if (filterValue == null || Float.parseFloat(fieldValue) <= Float.parseFloat(filterValue.toString())) {
+	                        if (filterValue == null || Double.parseDouble(fieldValue) <= Double.parseDouble(filterValue.toString())) {
 	                            match = true;
 	                        }
 	                        else {

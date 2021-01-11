@@ -42,14 +42,12 @@ public class Finder extends SimpleFileVisitor<Path> {
 			Path separateDirForID = Paths.get(savedLocation.toString());
 			if (!allDir.contains(separateDirForID)) {
 				Files.createDirectories(separateDirForID);
-				log.info("Create folder " + separateDirForID);
 				allDir.add(separateDirForID);
 			}
 
 			StringBuilder copyInfo = new StringBuilder("Copy ");
 			log.info(copyInfo.append(subFile).append(" to ").append(separateDirForID));
-			Files.copy(subFile, Paths.get(separateDirForID.toString() + "\\" + subFile.getFileName()),
-					REPLACE_EXISTING);
+			Files.copy(subFile, Paths.get(separateDirForID.toString() + "\\" + subFile.getFileName()), REPLACE_EXISTING);
 		}
 	}
 
