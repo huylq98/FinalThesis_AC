@@ -5,7 +5,8 @@
 package core.test;
 
 import core.Submission;
-import core.util.XMLSerializable;
+import utils.XMLSerializable;
+
 import java.io.IOException;
 import org.jdom2.Element;
 

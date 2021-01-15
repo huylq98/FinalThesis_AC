@@ -4,8 +4,9 @@
 */
 package core.extract;
 
-import core.util.SourceFileCache;
 import java.io.File;
+
+import utils.SourceFileCache;
 
 public class ContentPatternFilter extends PatternFilter {
 

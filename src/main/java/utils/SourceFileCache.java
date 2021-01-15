@@ -2,9 +2,8 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util;
+package utils;
 
-import core.util.archive.ArchiveFormat;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +11,9 @@ import java.util.HashSet;
 import java.util.StringTokenizer;
 import java.util.WeakHashMap;
 import org.apache.logging.log4j.Logger;
+
+import utils.archive.ArchiveFormat;
+
 import org.apache.logging.log4j.LogManager;
 
 public class SourceFileCache {

@@ -17,18 +17,16 @@
 			filteredValue="#{fileUploadBean.filteredSubResults}"
 			rendered="#{fileUploadBean.results ne null}"
 			styleClass="result-table">
-			<p:ajax event="rowSelect" update=":mainForm:resultDetail"
-				oncomplete="PF('resultDialog').show()" />
-			<p:column headerText="Submission A" sortBy="#{result.a}">
+			<p:ajax event="rowSelect" update=":mainForm:resultDetail" oncomplete="PF('resultDialog').show()" />
+			<p:column headerText="Submission A">
 				<h:outputText value="#{result.a}" />
 			</p:column>
 
-			<p:column headerText="Submission B" sortBy="#{result.b}">
+			<p:column headerText="Submission B">
 				<h:outputText value="#{result.b}" />
 			</p:column>
 
-			<p:column headerText="Distance" sortBy="#{result.dist}"
-				filterBy="#{result.dist}" filterMatchMode="lte">
+			<p:column headerText="Distance" sortBy="#{result.dist}" filterBy="#{result.dist}" filterMatchMode="lte">
 				<f:facet name="filter">
 					<p:spinner value="#{fileUploadBean.defaultDist}" onchange="PF('dataTableWidgetVar').filter()" min="0"
 						max="1" stepFactor="0.01">
@@ -47,8 +45,7 @@
 			<h:outputText value="Thời gian phân tích: #{fileUploadBean.totalTime}ms&lt;br/&gt;" escape="false"/>
 		</p:outputPanel>
 
-		<p:dialog widgetVar="resultDialog" modal="true" showEffect="fade"
-			hideEffect="fade">
+		<p:dialog widgetVar="resultDialog" modal="true" showEffect="fade" hideEffect="fade">
 			<p:panelGrid id="resultDetail" columns="2">
 				<h:outputText value="#{fileUploadBean.selectedAnalysis.a}" />
 				<h:outputText value="#{fileUploadBean.selectedAnalysis.b}" />

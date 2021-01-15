@@ -2,11 +2,14 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util;
+package utils;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
-import core.util.archive.*;
+
+import utils.archive.*;
+
+import static utils.I18N.m;
 
 import java.awt.Component;
 import java.io.BufferedInputStream;
@@ -29,8 +32,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static core.util.I18N.m;
 
 public class FileUtils {
 

@@ -2,7 +2,7 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util;
+package utils;
 
 import java.io.IOException;
 import java.util.ArrayList;

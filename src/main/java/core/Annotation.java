@@ -4,7 +4,8 @@
 */
 package core;
 
-import core.util.XMLSerializable;
+import static utils.I18N.m;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import org.jdom2.Element;
 
-import static core.util.I18N.m;
+import utils.XMLSerializable;
 
 public class Annotation implements XMLSerializable {
 

@@ -23,7 +23,7 @@ import org.jdom2.input.SAXBuilder;
 
 import core.extract.FileTreeNode;
 import core.test.Test;
-import core.util.XMLSerializable;
+import utils.XMLSerializable;
 
 public class Analysis implements XMLSerializable {
 

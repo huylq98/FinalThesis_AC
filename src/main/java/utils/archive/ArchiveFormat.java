@@ -2,7 +2,7 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util.archive;
+package utils.archive;
 
 import java.io.File;
 import java.io.IOException;

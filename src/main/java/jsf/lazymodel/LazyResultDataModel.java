@@ -10,6 +10,7 @@ import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 
 import core.Analysis.Result;
+import utils.Constant;
 
 public class LazyResultDataModel extends LazyDataModel<Result> {
 
@@ -48,7 +49,7 @@ public class LazyResultDataModel extends LazyDataModel<Result> {
 	            	if(filterMeta.isEmpty()) {
 						try {
 							  String filterField = "dist";
-		                        Object filterValue = 0.37;
+		                        Object filterValue = Constant.DEFAULT_DIST;
 		                        String fieldValue = String.valueOf(result.getClass().getField(filterField).get(result));
 		                        if (filterValue == null || Double.parseDouble(fieldValue) <= Double.parseDouble(filterValue.toString())) {
 		                            match = true;

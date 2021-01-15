@@ -1,4 +1,4 @@
-package ptrie;
+package ui.ptrie;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -238,38 +238,5 @@ public class Node {
 		}
 		// FIXME: Avoid memory hogs
 		l.add(pos);
-	}
-
-	public StringBuffer print(StringBuffer sb, int indent) {
-
-		for (int i = 0; i < indent; i++) {
-			sb.append("  ");
-		}
-
-		sb.append("'" + getData() + "' ");
-
-		for (Object o : locations.keySet()) {
-			sb.append(o + " {");
-			for (int i : locations.get(o)) {
-				sb.append("" + i + "");
-			}
-			sb.append("} ");
-		}
-
-		sb.append("Total = " + total + " ");
-
-		sb.append("Unique = " + uniqueCount + " ");
-
-		for (Object o : unique) {
-			sb.append(" - " + o);
-		}
-
-		sb.append("\n");
-
-		for (char c : children.keySet()) {
-			children.get(c).print(sb.append(c).append("- "), indent + 1);
-		}
-
-		return sb;
 	}
 }

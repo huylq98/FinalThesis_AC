@@ -1,4 +1,4 @@
-package ptrie;
+package ui.ptrie;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,10 +129,7 @@ public class PTrie {
 
 				if (nextLen == 0) {
 					System.err.println("Error: 'next' has zero length");
-					System.err.println("adding '" + s + "'+" + offset + "='"
-							+ s.substring(offset) + "'(" + depth + ") to \n"
-							+ start.print(new StringBuffer(), 0));
-					throw new IllegalArgumentException("Erro");
+					throw new IllegalArgumentException("Error");
 				}
 
 				for (int p = 0; /**/; p++) {

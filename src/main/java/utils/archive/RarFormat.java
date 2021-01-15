@@ -2,7 +2,7 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util.archive;
+package utils.archive;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import com.github.junrar.exception.RarException;
 import com.github.junrar.impl.FileVolumeManager;
 import com.github.junrar.rarfile.FileHeader;
+
+import utils.FileUtils;
+
 import com.github.junrar.Archive;
-import core.util.FileUtils;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 

@@ -4,9 +4,9 @@ import java.util.Comparator;
 
 import org.primefaces.model.SortOrder;
 
-import core.Analysis;
+import core.Analysis.Result;;
 
-public class LazySorter implements Comparator<Analysis.Result> {
+public class LazySorter implements Comparator<Result> {
 	 
     private String sortField;
      
@@ -17,10 +17,10 @@ public class LazySorter implements Comparator<Analysis.Result> {
         this.sortOrder = sortOrder;
     }
  
-    public int compare(Analysis.Result car1, Analysis.Result car2) {
+    public int compare(Result result1, Result result2) {
         try {
-            Object value1 = Analysis.Result.class.getField(this.sortField).get(car1);
-            Object value2 = Analysis.Result.class.getField(this.sortField).get(car2);
+            Object value1 = Result.class.getField(this.sortField).get(result1);
+            Object value2 = Result.class.getField(this.sortField).get(result2);
  
             int value = ((Comparable<Object>)value1).compareTo(value2);
              

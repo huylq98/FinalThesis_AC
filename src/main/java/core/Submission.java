@@ -5,8 +5,9 @@
 package core;
 
 import core.extract.Hasher;
-import core.util.SourceFileCache;
-import core.util.XMLSerializable;
+import utils.SourceFileCache;
+import utils.XMLSerializable;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

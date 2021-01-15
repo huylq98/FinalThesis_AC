@@ -4,8 +4,9 @@
 */
 package core;
 
-import core.util.XMLSerializable;
 import java.io.PrintWriter;
+
+import utils.XMLSerializable;
 
 public interface Tokenizer extends XMLSerializable {
 

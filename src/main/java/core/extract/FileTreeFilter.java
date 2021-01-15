@@ -4,11 +4,11 @@
 */
 package core.extract;
 
-import core.util.XMLSerializable;
-
 import java.io.FileFilter;
 import java.io.IOException;
 import org.jdom2.Element;
+
+import utils.XMLSerializable;
 
 /**
  * A file-tree filter.

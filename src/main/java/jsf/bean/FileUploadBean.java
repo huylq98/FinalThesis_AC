@@ -38,10 +38,11 @@ import org.primefaces.model.file.UploadedFile;
 
 import core.Analysis.Result;
 import core.Submission;
-import core.util.FileUtils;
 import jsf.lazymodel.LazyResultDataModel;
 import ui.Main;
 import ui.gui.CompareDialog;
+import utils.Constant;
+import utils.FileUtils;
 
 @Named
 @ViewScoped
@@ -53,7 +54,7 @@ public class FileUploadBean implements Serializable {
 	public static List<Result> subResults = new ArrayList<>();
 	private Result selectedAnalysis;
 	private LazyDataModel<Result> filteredSubResults;
-	private Double defaultDist = 0.37;
+	private Double defaultDist = Constant.DEFAULT_DIST;
 	private LazyDataModel<Result> lazyModel;
 	private TreeNode root;
 	private File uncompressedFile;
@@ -223,7 +224,7 @@ public class FileUploadBean implements Serializable {
 		if (subA == null || subB == null)
 			return null;
 		CompareDialog cd = new CompareDialog(subA, subB);
-		cd.wrapAndHighlight(10);
+		cd.startHighlight(10);
 		List<Integer[]> currentLocationsOfA = new ArrayList<>();
 		List<Integer[]> currentLocationsOfB = new ArrayList<>();
 

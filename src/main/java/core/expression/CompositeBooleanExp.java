@@ -6,8 +6,10 @@ package core.expression;
 
 import core.extract.CompositeFilter;
 import core.extract.FileTreeFilter;
+
+import static utils.I18N.m;
+
 import java.util.ArrayList;
-import static core.util.I18N.m;
 
 /**
  * A composite expression that evaluates to true or false depending on its

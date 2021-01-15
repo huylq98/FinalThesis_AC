@@ -8,8 +8,9 @@ import core.extract.CompositeFilter;
 import core.extract.FileTreeModel;
 import core.extract.FileTreeNode;
 import core.extract.Hasher;
-import core.util.FileUtils;
-import core.util.XMLSerializable;
+import utils.FileUtils;
+import utils.XMLSerializable;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

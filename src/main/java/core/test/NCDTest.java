@@ -5,7 +5,8 @@
 package core.test;
 
 import core.Submission;
-import core.util.archive.ArchiveFormat;
+import utils.archive.ArchiveFormat;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;

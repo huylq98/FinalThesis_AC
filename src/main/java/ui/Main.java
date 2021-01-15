@@ -16,11 +16,11 @@ import java.util.Locale;
 
 import core.SourceSet;
 import core.test.NCDTest;
-import core.util.I18N;
-import core.util.archive.ZipFormat;
 import ui.extract.ZipSelectionPanel;
 import ui.gui.MainGui;
 import utils.Finder;
+import utils.I18N;
+import utils.archive.ZipFormat;
 
 public class Main {
 

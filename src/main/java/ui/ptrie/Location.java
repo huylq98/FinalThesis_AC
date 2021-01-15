@@ -50,7 +50,7 @@
  *
  */
 
-package ptrie;
+package ui.ptrie;
 
 /**
  * A very simple container class for base+offset pairs

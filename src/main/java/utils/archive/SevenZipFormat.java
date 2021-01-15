@@ -2,7 +2,7 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util.archive;
+package utils.archive;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import core.util.FileUtils;
+import utils.FileUtils;
 
 /**
  * Manages the 7-zip format.

@@ -1,4 +1,4 @@
-package stringmap;
+package ui.stringmap;
 
 import java.util.ArrayList;
 import java.util.Comparator;

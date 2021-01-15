@@ -4,8 +4,10 @@
 */
 package core.extract;
 
-import core.util.FileUtils;
 import org.apache.logging.log4j.Logger;
+
+import utils.FileUtils;
+
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;

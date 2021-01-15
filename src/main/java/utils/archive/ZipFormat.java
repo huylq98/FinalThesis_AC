@@ -2,12 +2,13 @@
  *@author ThomasLe
  *@date Nov 29, 2020
 */
-package core.util.archive;
+package utils.archive;
 
-import core.util.FileUtils;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipFile;
+
+import utils.FileUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

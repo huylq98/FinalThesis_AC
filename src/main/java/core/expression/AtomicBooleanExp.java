@@ -10,9 +10,10 @@ import core.extract.FileNameFilter;
 import core.extract.FileTreeFilter;
 import core.extract.PathFilter;
 import core.extract.PatternFilter;
-import java.util.ArrayList;
 
-import static core.util.I18N.m;
+import static utils.I18N.m;
+
+import java.util.ArrayList;
 
 public class AtomicBooleanExp implements FilterExpression {
 
