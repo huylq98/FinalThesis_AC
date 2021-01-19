@@ -1,16 +1,16 @@
 package ui.gui;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import core.Submission;
-import ui.gui.Interval;
 import ui.ptrie.Location;
 import ui.ptrie.Node;
 import ui.ptrie.PTrie;
 import ui.stringmap.Mapper;
 import utils.Constant;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 public class CompareDialog {
 
@@ -18,8 +18,6 @@ public class CompareDialog {
 	private Submission submissionB;
 	private String sourceA;
 	private String sourceB;
-	private ArrayList<Interval> intervalA;
-	private ArrayList<Interval> intervalB;
 
 	public CompareDialog(Submission submissionA, Submission submissionB) {
 		this.submissionA = submissionA;
@@ -68,30 +66,46 @@ public class CompareDialog {
 			}
 		}
 
-		this.intervalA = new ArrayList<>(nodes.size());
+		List<Interval> intervalA = new ArrayList<>(nodes.size());
 
 		for (Node n : nodes) {
 			for (Location loc : n.getLocations()) {
 				if (loc.getBase() == this.submissionA) {
-					Interval in = new Interval(ma.rmap(loc.getOffset(), true),
-							ma.rmap(loc.getOffset() + n.getStringLength(), false), n, loc);
-					this.intervalA.add(in);
+					Interval in = new Interval(ma.rmap(loc.getOffset(), true), ma.rmap(loc.getOffset() + n.getStringLength(), false), n, loc);
+					intervalA.add(in);
 				}
 			}
 		}
 
 		// color increment
-		this.intervalB = new ArrayList<>(nodes.size());
+		List<Interval> intervalB = new ArrayList<>(nodes.size());
 
 		for (Node n : nodes) {
 			for (Location loc : n.getLocations()) {
 				if (loc.getBase() == this.submissionB) {
-					Interval in = new Interval(mb.rmap(loc.getOffset(), true),
-							mb.rmap(loc.getOffset() + n.getStringLength(), false), n, loc);
-					this.intervalB.add(in);
+					Interval in = new Interval(mb.rmap(loc.getOffset(), true), mb.rmap(loc.getOffset() + n.getStringLength(), false), n, loc);
+					intervalB.add(in);
 				}
 			}
 		}
+		
+		this.sourceA = hightlight(intervalA, this.sourceA);
+		this.sourceB = hightlight(intervalB, this.sourceB);
+	}
+	
+	private String hightlight(List<Interval> intervals, String source) {
+		String beginSpanTag = "<span style=\"background-color: #fdffbc;\">";
+		String endSpanTag = "</span>";
+		
+		List<String> replaceSources = new ArrayList<>();
+		for(Interval interval : intervals) {
+			replaceSources.add(source.substring(interval.so, interval.eo));
+		}
+		
+		for(String s : replaceSources) {
+			source = source.replace(s, beginSpanTag + s + endSpanTag);
+		}
+		return source;
 	}
 
 	private String wrapText(String text, int maxCols) {
@@ -125,21 +139,5 @@ public class CompareDialog {
 
 	public void setSourceB(String sourceB) {
 		this.sourceB = sourceB;
-	}
-
-	public ArrayList<Interval> getIntervalA() {
-		return intervalA;
-	}
-
-	public void setIntervalA(ArrayList<Interval> intervalA) {
-		this.intervalA = intervalA;
-	}
-
-	public ArrayList<Interval> getIntervalB() {
-		return intervalB;
-	}
-
-	public void setIntervalB(ArrayList<Interval> intervalB) {
-		this.intervalB = intervalB;
 	}
 }

@@ -225,35 +225,35 @@ public class FileUploadBean implements Serializable {
 			return null;
 		CompareDialog cd = new CompareDialog(subA, subB);
 		cd.startHighlight(10);
-		List<Integer[]> currentLocationsOfA = new ArrayList<>();
-		List<Integer[]> currentLocationsOfB = new ArrayList<>();
-
-		cd.getIntervalA().forEach(interval -> currentLocationsOfA.add(new Integer[] { interval.so, interval.eo }));
-		cd.getIntervalB().forEach(interval -> currentLocationsOfB.add(new Integer[] { interval.so, interval.eo }));
-
-		String submissionA = cd.getSourceA();
-		String submissionB = cd.getSourceB();
-
-		List<String> partOfSourceA = new ArrayList<>();
-		List<String> partOfSourceB = new ArrayList<>();
-		for (Integer[] location : currentLocationsOfA) {
-			partOfSourceA.add(submissionA.substring(location[0], location[1]));
-		}
-		for (Integer[] location : currentLocationsOfB) {
-			partOfSourceB.add(submissionB.substring(location[0], location[1]));
-		}
-
-		for (String part : partOfSourceA) {
-			submissionA = submissionA.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
-		}
-
-		for (String part : partOfSourceB) {
-			submissionB = submissionB.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
-		}
+//		List<Integer[]> currentLocationsOfA = new ArrayList<>();
+//		List<Integer[]> currentLocationsOfB = new ArrayList<>();
+//
+//		cd.getIntervalA().forEach(interval -> currentLocationsOfA.add(new Integer[] { interval.so, interval.eo }));
+//		cd.getIntervalB().forEach(interval -> currentLocationsOfB.add(new Integer[] { interval.so, interval.eo }));
+//
+//		String submissionA = cd.getSourceA();
+//		String submissionB = cd.getSourceB();
+//
+//		List<String> partOfSourceA = new ArrayList<>();
+//		List<String> partOfSourceB = new ArrayList<>();
+//		for (Integer[] location : currentLocationsOfA) {
+//			partOfSourceA.add(submissionA.substring(location[0], location[1]));
+//		}
+//		for (Integer[] location : currentLocationsOfB) {
+//			partOfSourceB.add(submissionB.substring(location[0], location[1]));
+//		}
+//
+//		for (String part : partOfSourceA) {
+//			submissionA = submissionA.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
+//		}
+//
+//		for (String part : partOfSourceB) {
+//			submissionB = submissionB.replace(part, "<span style=\"background-color: #fdffbc;\">" + part + "</span>");
+//		}
 		if (sel)
-			return submissionA;
+			return cd.getSourceA();
 		else
-			return submissionB;
+			return cd.getSourceB();
 	}
 
 	private class BeanFinder extends SimpleFileVisitor<Path> {
